@@ -1,34 +1,36 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * CJPort - An utility library to aid the port of C-code to java
+ * Copyright (C) 2014  Alexander Heusel
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
  */
 
-package org.cport;
+package org.cjport;
 
-import java.nio.FloatBuffer;
+import java.nio.LongBuffer;
 
 /**
  *
  * @author aheusel
  */
-public abstract class pfloatBase<T> extends pvoid
+public abstract class plongBase<T> extends pvoid
 {
-    protected final float[] array;
+    protected long[] array;
     
-    protected pfloatBase(int offset, float[] array)
+    protected plongBase(int offset, long[] array)
     {
         super(offset);
         this.array = array;
@@ -44,16 +46,17 @@ public abstract class pfloatBase<T> extends pvoid
         return array == null;
     }
     
+    
     /**
      * Returns the internal array
      * 
      * @return Internal array
      */
-    final public float[] array()
+    final public long[] array()
     {
         return array;
     }
-        
+    
     /**
      * Mimics the following construct in C-Code:
      * int16 r = src[idx];
@@ -61,7 +64,7 @@ public abstract class pfloatBase<T> extends pvoid
      * @param idx Index of value to get
      * @return Value at index idx
      */
-    final public float deref(int idx)
+    final public long deref(int idx)
     {
         return array[offset + idx];
     }
@@ -72,7 +75,7 @@ public abstract class pfloatBase<T> extends pvoid
      * 
      * @return value at offset
      */
-    final public float deref()
+    final public long deref()
     {
         return array[offset];
     }
@@ -85,7 +88,7 @@ public abstract class pfloatBase<T> extends pvoid
      * @param idx Index to assign value to
      * @param value Value to assign
      */
-    final public void derefAsgn(int idx, float value)
+    final public void derefAsgn(int idx, long value)
     {
         array[offset + idx] = value;
     }
@@ -96,7 +99,7 @@ public abstract class pfloatBase<T> extends pvoid
      * 
      * @param value Value to asign
      */
-    public void derefAsgn(float value)
+    public void derefAsgn(long value)
     {
         array[offset] = value;
     }
@@ -109,7 +112,7 @@ public abstract class pfloatBase<T> extends pvoid
      * @param idx index of the element
      * @return pointer to that element
      */
-    public abstract pfloatBase<T> derefAddr(int idx);
+    public abstract plongBase<T> derefAddr(int idx);
     
     /**
      * Subtracts two pointers and returns their distance.
@@ -118,7 +121,7 @@ public abstract class pfloatBase<T> extends pvoid
      * @param other The other pointer.
      * @return Distance between two pointers.
      */
-    public final int sub(pfloatBase<T> other)
+    public final int sub(plongBase<T> other)
     {
         if(!this.array.equals(other.array))
         {
@@ -126,13 +129,13 @@ public abstract class pfloatBase<T> extends pvoid
         }
         return this.offset - other.offset;
     }
-    
+
     /**
-     * Returns a corresponding FloatBuffer
+     * Returns a corresponding LongBuffer
      */
-    public final FloatBuffer getFloatBuffer()
+    public final LongBuffer getLongBuffer()
     {
-        return FloatBuffer.wrap(array, offset, array.length - offset);
+        return LongBuffer.wrap(array, offset, array.length - offset);
     }
 
     /**
@@ -141,18 +144,18 @@ public abstract class pfloatBase<T> extends pvoid
      * @param nbytes The new size of the memory in bytes
      * @return A new pointer to the realloced memory
      */
-    public abstract pfloatBase<T> realloc(int nbytes);
-       
-    protected final float[] reallocArray(int nbytes)
+    public abstract plongBase<T> realloc(int nbytes);    
+    
+    protected final long[] reallocArray(int nbytes)
     {
-        final int elemSize = Float.SIZE / 8;
+        final int elemSize = Long.SIZE / 8;
         if((nbytes % elemSize) != 0)
         {
             throw new java.lang.IllegalArgumentException("Mismatch of element size and number of bytes.");
         }
         
         final int nelem = nbytes / elemSize;
-        final float[] newArray = new float[nelem];
+        final long[] newArray = new long[nelem];
         if(nelem > array.length)
         {
             System.arraycopy(array, 0, newArray, 0, array.length);

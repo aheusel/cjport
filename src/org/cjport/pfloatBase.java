@@ -1,35 +1,36 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * CJPort - An utility library to aid the port of C-code to java
+ * Copyright (C) 2014  Alexander Heusel
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
  */
 
-package org.cport;
+package org.cjport;
 
-import java.nio.IntBuffer;
+import java.nio.FloatBuffer;
 
 /**
  *
  * @author aheusel
- * @param <T>
  */
-public abstract class pintBase<T> extends pvoid
+public abstract class pfloatBase<T> extends pvoid
 {
-    protected int[] array;
+    protected final float[] array;
     
-    protected pintBase(int offset, int[] array)
+    protected pfloatBase(int offset, float[] array)
     {
         super(offset);
         this.array = array;
@@ -45,17 +46,16 @@ public abstract class pintBase<T> extends pvoid
         return array == null;
     }
     
-    
     /**
      * Returns the internal array
      * 
      * @return Internal array
      */
-    final public int[] array()
+    final public float[] array()
     {
         return array;
     }
-    
+        
     /**
      * Mimics the following construct in C-Code:
      * int16 r = src[idx];
@@ -63,7 +63,7 @@ public abstract class pintBase<T> extends pvoid
      * @param idx Index of value to get
      * @return Value at index idx
      */
-    final public int deref(int idx)
+    final public float deref(int idx)
     {
         return array[offset + idx];
     }
@@ -74,7 +74,7 @@ public abstract class pintBase<T> extends pvoid
      * 
      * @return value at offset
      */
-    final public int deref()
+    final public float deref()
     {
         return array[offset];
     }
@@ -87,7 +87,7 @@ public abstract class pintBase<T> extends pvoid
      * @param idx Index to assign value to
      * @param value Value to assign
      */
-    final public void derefAsgn(int idx, int value)
+    final public void derefAsgn(int idx, float value)
     {
         array[offset + idx] = value;
     }
@@ -98,7 +98,7 @@ public abstract class pintBase<T> extends pvoid
      * 
      * @param value Value to asign
      */
-    public void derefAsgn(int value)
+    public void derefAsgn(float value)
     {
         array[offset] = value;
     }
@@ -111,7 +111,7 @@ public abstract class pintBase<T> extends pvoid
      * @param idx index of the element
      * @return pointer to that element
      */
-    public abstract pintBase<T> derefAddr(int idx);
+    public abstract pfloatBase<T> derefAddr(int idx);
     
     /**
      * Subtracts two pointers and returns their distance.
@@ -120,7 +120,7 @@ public abstract class pintBase<T> extends pvoid
      * @param other The other pointer.
      * @return Distance between two pointers.
      */
-    public final int sub(pintBase<T> other)
+    public final int sub(pfloatBase<T> other)
     {
         if(!this.array.equals(other.array))
         {
@@ -128,13 +128,13 @@ public abstract class pintBase<T> extends pvoid
         }
         return this.offset - other.offset;
     }
-
+    
     /**
-     * Returns a corresponding IntBuffer
+     * Returns a corresponding FloatBuffer
      */
-    public final IntBuffer getIntBuffer()
+    public final FloatBuffer getFloatBuffer()
     {
-        return IntBuffer.wrap(array, offset, array.length - offset);
+        return FloatBuffer.wrap(array, offset, array.length - offset);
     }
 
     /**
@@ -143,18 +143,18 @@ public abstract class pintBase<T> extends pvoid
      * @param nbytes The new size of the memory in bytes
      * @return A new pointer to the realloced memory
      */
-    public abstract pintBase<T> realloc(int nbytes);
-        
-    protected final int[] reallocArray(int nbytes)
+    public abstract pfloatBase<T> realloc(int nbytes);
+       
+    protected final float[] reallocArray(int nbytes)
     {
-        final int elemSize = Integer.SIZE / 8;
+        final int elemSize = Float.SIZE / 8;
         if((nbytes % elemSize) != 0)
         {
             throw new java.lang.IllegalArgumentException("Mismatch of element size and number of bytes.");
         }
         
         final int nelem = nbytes / elemSize;
-        final int[] newArray = new int[nelem];
+        final float[] newArray = new float[nelem];
         if(nelem > array.length)
         {
             System.arraycopy(array, 0, newArray, 0, array.length);
@@ -165,5 +165,6 @@ public abstract class pintBase<T> extends pvoid
         }
         return newArray;
     }
-
+    
+    
 }

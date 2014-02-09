@@ -1,35 +1,36 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * CJPort - An utility library to aid the port of C-code to java
+ * Copyright (C) 2014  Alexander Heusel
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
  */
 
-package org.cport;
+package org.cjport;
 
-import java.nio.ByteBuffer;
+import java.nio.DoubleBuffer;
 
 /**
  *
- * @author Alexander Heusel
- * @param <T>
+ * @author aheusel
  */
-public abstract class pbyteBase<T> extends pvoid
+public abstract class pdoubleBase<T> extends pvoid
 {
-    protected byte[] array;
+    protected final double[] array;
     
-    protected pbyteBase(int offset, byte[] array)
+    protected pdoubleBase(int offset, double[] array)
     {
         super(offset);
         this.array = array;
@@ -45,13 +46,12 @@ public abstract class pbyteBase<T> extends pvoid
         return array == null;
     }
     
-    
     /**
      * Returns the internal array
      * 
      * @return Internal array
      */
-    final public byte[] array()
+    final public double[] array()
     {
         return array;
     }
@@ -63,7 +63,7 @@ public abstract class pbyteBase<T> extends pvoid
      * @param idx Index of value to get
      * @return Value at index idx
      */
-    final public byte deref(int idx)
+    final public double deref(int idx)
     {
         return array[offset + idx];
     }
@@ -74,10 +74,11 @@ public abstract class pbyteBase<T> extends pvoid
      * 
      * @return value at offset
      */
-    final public byte deref()
+    final public double deref()
     {
         return array[offset];
     }
+    
     
     /**
      * Mimics the following construct in C-Code:
@@ -86,7 +87,7 @@ public abstract class pbyteBase<T> extends pvoid
      * @param idx Index to assign value to
      * @param value Value to assign
      */
-    final public void derefAsgn(int idx, byte value)
+    final public void derefAsgn(int idx, double value)
     {
         array[offset + idx] = value;
     }
@@ -97,7 +98,7 @@ public abstract class pbyteBase<T> extends pvoid
      * 
      * @param value Value to asign
      */
-    public void derefAsgn(byte value)
+    public void derefAsgn(double value)
     {
         array[offset] = value;
     }
@@ -110,7 +111,7 @@ public abstract class pbyteBase<T> extends pvoid
      * @param idx index of the element
      * @return pointer to that element
      */
-    public abstract pbyteBase<T> derefAddr(int idx);
+    public abstract pdoubleBase<T> derefAddr(int idx);
     
     /**
      * Subtracts two pointers and returns their distance.
@@ -119,7 +120,7 @@ public abstract class pbyteBase<T> extends pvoid
      * @param other The other pointer.
      * @return Distance between two pointers.
      */
-    public final int sub(pbyteBase<T> other)
+    public final int sub(pdoubleBase<T> other)
     {
         if(!this.array.equals(other.array))
         {
@@ -127,13 +128,13 @@ public abstract class pbyteBase<T> extends pvoid
         }
         return this.offset - other.offset;
     }
-    
+
     /**
-     * Returns a corresponding ByteBuffer
+     * Returns a corresponding DoubleBuffer
      */
-    public final ByteBuffer getByteBuffer()
+    public final DoubleBuffer getDoubleBuffer()
     {
-        return ByteBuffer.wrap(array, offset, array.length - offset);
+        return DoubleBuffer.wrap(array, offset, array.length - offset);
     }
 
     /**
@@ -142,21 +143,29 @@ public abstract class pbyteBase<T> extends pvoid
      * @param nbytes The new size of the memory in bytes
      * @return A new pointer to the realloced memory
      */
-    public abstract pbyteBase<T> realloc(int nbytes);
+    public abstract pdoubleBase<T> realloc(int nbytes);
+
+    protected final double[] reallocArray(int nbytes)
+    {
+        final int elemSize = Double.SIZE / 8;
+        if((nbytes % elemSize) != 0)
+        {
+            throw new java.lang.IllegalArgumentException("Mismatch of element size and number of bytes.");
+        }
         
-    protected final byte[] reallocArray(int nbytes)
-    {        
-        byte[] newArray = new byte[nbytes];
-        if(nbytes > array.length)
+        final int nelem = nbytes / elemSize;
+        final double[] newArray = new double[nelem];
+        if(nelem > array.length)
         {
             System.arraycopy(array, 0, newArray, 0, array.length);
         }
         else
         {
-            System.arraycopy(array, 0, newArray, 0, nbytes);
+            System.arraycopy(array, 0, newArray, 0, nelem);
         }
         return newArray;
     }
-
+    
+    
     
 }

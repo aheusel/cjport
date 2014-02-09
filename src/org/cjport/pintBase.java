@@ -1,34 +1,37 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- *//*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * CJPort - An utility library to aid the port of C-code to java
+ * Copyright (C) 2014  Alexander Heusel
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
  */
 
-package org.cport;
+package org.cjport;
 
-import java.nio.LongBuffer;
+import java.nio.IntBuffer;
 
 /**
  *
  * @author aheusel
+ * @param <T>
  */
-public abstract class plongBase<T> extends pvoid
+public abstract class pintBase<T> extends pvoid
 {
-    protected long[] array;
+    protected int[] array;
     
-    protected plongBase(int offset, long[] array)
+    protected pintBase(int offset, int[] array)
     {
         super(offset);
         this.array = array;
@@ -50,7 +53,7 @@ public abstract class plongBase<T> extends pvoid
      * 
      * @return Internal array
      */
-    final public long[] array()
+    final public int[] array()
     {
         return array;
     }
@@ -62,7 +65,7 @@ public abstract class plongBase<T> extends pvoid
      * @param idx Index of value to get
      * @return Value at index idx
      */
-    final public long deref(int idx)
+    final public int deref(int idx)
     {
         return array[offset + idx];
     }
@@ -73,7 +76,7 @@ public abstract class plongBase<T> extends pvoid
      * 
      * @return value at offset
      */
-    final public long deref()
+    final public int deref()
     {
         return array[offset];
     }
@@ -86,7 +89,7 @@ public abstract class plongBase<T> extends pvoid
      * @param idx Index to assign value to
      * @param value Value to assign
      */
-    final public void derefAsgn(int idx, long value)
+    final public void derefAsgn(int idx, int value)
     {
         array[offset + idx] = value;
     }
@@ -97,7 +100,7 @@ public abstract class plongBase<T> extends pvoid
      * 
      * @param value Value to asign
      */
-    public void derefAsgn(long value)
+    public void derefAsgn(int value)
     {
         array[offset] = value;
     }
@@ -110,7 +113,7 @@ public abstract class plongBase<T> extends pvoid
      * @param idx index of the element
      * @return pointer to that element
      */
-    public abstract plongBase<T> derefAddr(int idx);
+    public abstract pintBase<T> derefAddr(int idx);
     
     /**
      * Subtracts two pointers and returns their distance.
@@ -119,7 +122,7 @@ public abstract class plongBase<T> extends pvoid
      * @param other The other pointer.
      * @return Distance between two pointers.
      */
-    public final int sub(plongBase<T> other)
+    public final int sub(pintBase<T> other)
     {
         if(!this.array.equals(other.array))
         {
@@ -129,11 +132,11 @@ public abstract class plongBase<T> extends pvoid
     }
 
     /**
-     * Returns a corresponding LongBuffer
+     * Returns a corresponding IntBuffer
      */
-    public final LongBuffer getLongBuffer()
+    public final IntBuffer getIntBuffer()
     {
-        return LongBuffer.wrap(array, offset, array.length - offset);
+        return IntBuffer.wrap(array, offset, array.length - offset);
     }
 
     /**
@@ -142,18 +145,18 @@ public abstract class plongBase<T> extends pvoid
      * @param nbytes The new size of the memory in bytes
      * @return A new pointer to the realloced memory
      */
-    public abstract plongBase<T> realloc(int nbytes);    
-    
-    protected final long[] reallocArray(int nbytes)
+    public abstract pintBase<T> realloc(int nbytes);
+        
+    protected final int[] reallocArray(int nbytes)
     {
-        final int elemSize = Long.SIZE / 8;
+        final int elemSize = Integer.SIZE / 8;
         if((nbytes % elemSize) != 0)
         {
             throw new java.lang.IllegalArgumentException("Mismatch of element size and number of bytes.");
         }
         
         final int nelem = nbytes / elemSize;
-        final long[] newArray = new long[nelem];
+        final int[] newArray = new int[nelem];
         if(nelem > array.length)
         {
             System.arraycopy(array, 0, newArray, 0, array.length);
@@ -164,6 +167,5 @@ public abstract class plongBase<T> extends pvoid
         }
         return newArray;
     }
-    
-    
+
 }
