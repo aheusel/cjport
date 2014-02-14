@@ -1,0 +1,5 @@
+- Create standard unix routines like memcopy etc.
+- Possibility to cast from pubyte to pfloat. Needs major restructuring of pointer-foundation.
+- double and triple pointer classes: ppuint, pppuint
+- 64-bit pointers: No garbage-collection for sun.misc.Unsafe, use pageing instead
+- const-pointer interface?

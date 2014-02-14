@@ -52,6 +52,7 @@ public abstract class plongBase<T> extends pvoid
      * 
      * @return Internal array
      */
+    @Override
     final public long[] array()
     {
         return array;
@@ -137,14 +138,6 @@ public abstract class plongBase<T> extends pvoid
     {
         return LongBuffer.wrap(array, offset, array.length - offset);
     }
-
-    /**
-     * Reallocs the array the pointer points to
-     * 
-     * @param nbytes The new size of the memory in bytes
-     * @return A new pointer to the realloced memory
-     */
-    public abstract plongBase<T> realloc(int nbytes);    
     
     protected final long[] reallocArray(int nbytes)
     {

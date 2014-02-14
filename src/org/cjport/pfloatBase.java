@@ -51,6 +51,7 @@ public abstract class pfloatBase<T> extends pvoid
      * 
      * @return Internal array
      */
+    @Override
     final public float[] array()
     {
         return array;
@@ -136,14 +137,6 @@ public abstract class pfloatBase<T> extends pvoid
     {
         return FloatBuffer.wrap(array, offset, array.length - offset);
     }
-
-    /**
-     * Reallocs the array the pointer points to
-     * 
-     * @param nbytes The new size of the memory in bytes
-     * @return A new pointer to the realloced memory
-     */
-    public abstract pfloatBase<T> realloc(int nbytes);
        
     protected final float[] reallocArray(int nbytes)
     {

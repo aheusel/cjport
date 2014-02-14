@@ -54,6 +54,7 @@ public abstract class pshortBase<T> extends pvoid
      * 
      * @return Internal array
      */
+    @Override
     final public short[] array()
     {
         return array;
@@ -139,15 +140,7 @@ public abstract class pshortBase<T> extends pvoid
     {
         return ShortBuffer.wrap(array, offset, array.length - offset);
     }
-    
-    /**
-     * Reallocs the array the pointer points to
-     * 
-     * @param nbytes The new size of the memory in bytes
-     * @return A new pointer to the realloced memory
-     */
-    public abstract pshortBase<T> realloc(int nbytes);
-    
+        
     protected final short[] reallocArray(int nbytes)
     {
         final int elemSize = Short.SIZE / 8;

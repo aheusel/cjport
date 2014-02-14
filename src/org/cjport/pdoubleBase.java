@@ -51,6 +51,7 @@ public abstract class pdoubleBase<T> extends pvoid
      * 
      * @return Internal array
      */
+    @Override
     final public double[] array()
     {
         return array;
@@ -136,14 +137,6 @@ public abstract class pdoubleBase<T> extends pvoid
     {
         return DoubleBuffer.wrap(array, offset, array.length - offset);
     }
-
-    /**
-     * Reallocs the array the pointer points to
-     * 
-     * @param nbytes The new size of the memory in bytes
-     * @return A new pointer to the realloced memory
-     */
-    public abstract pdoubleBase<T> realloc(int nbytes);
 
     protected final double[] reallocArray(int nbytes)
     {

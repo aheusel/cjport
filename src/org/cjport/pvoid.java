@@ -23,7 +23,7 @@ package org.cjport;
  *
  * @author Alexander Heusel
  */
-public class pvoid
+public abstract class pvoid
 {
     protected int offset;
     
@@ -56,4 +56,18 @@ public class pvoid
     {
         offset -= decr;
     }
+
+    /**
+     * Reallocs the array the pointer points to
+     * 
+     * @param nbytes The new size of the memory in bytes
+     * @return A new pointer to the realloced memory
+     */    
+    public abstract pvoid realloc(int nbytes);    
+
+    /**
+     * 
+     */
+    public abstract Object array();
+    
 }

@@ -59,5 +59,47 @@ public class Util
     }
     
 
+    public static byte[] realloc(byte[] array, int newSize)
+    {
+        byte[] newArray = new byte[newSize];
+        System.arraycopy(array, 0, newArray, 0, Math.min(newSize, array.length));
+        return newArray;
+    }
+    
+    public static short[] realloc(short[] array, int newSize)
+    {
+        short[] newArray = new short[newSize];
+        System.arraycopy(array, 0, newArray, 0, Math.min(newSize, array.length));
+        return newArray;
+    }
+    
+    public static int[] realloc(int[] array, int newSize)
+    {
+        int[] newArray = new int[newSize];
+        System.arraycopy(array, 0, newArray, 0, Math.min(newSize, array.length));
+        return newArray;
+    }
+    
+    public static long[] realloc(long[] array, int newSize)
+    {
+        long[] newArray = new long[newSize];
+        System.arraycopy(array, 0, newArray, 0, Math.min(newSize, array.length));
+        return newArray;
+    }
+    
+    public static float[] realloc(float[] array, int newSize)
+    {
+        float[] newArray = new float[newSize];
+        System.arraycopy(array, 0, newArray, 0, Math.min(newSize, array.length));
+        return newArray;
+    }
+    
+    public static double[] realloc(double[] array, int newSize)
+    {
+        double[] newArray = new double[newSize];
+        System.arraycopy(array, 0, newArray, 0, Math.min(newSize, array.length));
+        return newArray;
+    }
+    
   
 }
